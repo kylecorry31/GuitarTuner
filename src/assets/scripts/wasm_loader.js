@@ -7,7 +7,7 @@ if (!WebAssembly.instantiateStreaming) { // polyfill
 
 const go = new Go();
 let mod, inst;
-WebAssembly.instantiateStreaming(fetch("assets/scripts/wasm.wasm"), go.importObject).then((result) => {
+WebAssembly.instantiateStreaming(fetch("assets/scripts/tuner.wasm"), go.importObject).then((result) => {
     mod = result.module;
     inst = result.instance;
     run();

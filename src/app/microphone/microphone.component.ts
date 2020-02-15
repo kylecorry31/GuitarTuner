@@ -10,9 +10,7 @@ import { Tuner } from './tuner';
 export class MicrophoneComponent implements OnInit {
 
   frequency: number;
-  offset: number;
   note: string;
-  noteNum: number;
   octave: number;
   
   private tuner: Tuner;
@@ -27,12 +25,10 @@ export class MicrophoneComponent implements OnInit {
   }
 
   private dataLoop(){
-    var tuneResult = this.tuner.getTuneResult();
+    var tuneResult = this.tuner.getFrequencyInfo();
     if (tuneResult != null && tuneResult.frequency){
       this.frequency = tuneResult.frequency;
-      this.offset = tuneResult.offset;
       this.note = tuneResult.note;
-      this.noteNum = tuneResult.noteNum;
       this.octave = tuneResult.octave;
     }
     requestAnimationFrame(this.dataLoop.bind(this));

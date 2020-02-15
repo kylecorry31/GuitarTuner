@@ -1,9 +1,7 @@
-export interface TuneResult {
+export interface FrequencyInfo {
     note: string;
-    noteNum: number;
     frequency: number;
     octave: number;
-    offset: number;
 };
 
 export class Tuner {
@@ -18,7 +16,7 @@ export class Tuner {
             navigator['webkitGetUserMedia'] ||
             navigator['mozGetUserMedia'] ||
             navigator['msGetUserMedia']);
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         this.context = new (AudioContext || window['webkitAudioContext'])();
         const source = this.context.createMediaStreamSource(stream);
         this.fft = this.context.createAnalyser();
@@ -29,19 +27,13 @@ export class Tuner {
        } 
     }
 
-    getTuneResult(): TuneResult | null {
-        if (!this.fft || !window['getAudioFrequency']){
+    getFrequencyInfo(): FrequencyInfo | null {
+        if (!this.fft || !window['getAudioFrequencyInfo']){
             return null;
         }
 
         this.fft.getFloatTimeDomainData(this.buffer);
-        let freq = window['getAudioFrequency'](this.buffer, this.context.sampleRate);
-        let offset = window['getNoteOffset'](freq);
-        let note = window['getNoteName'](freq);
-        let noteNum = window['getNoteNumber'](freq);
-        let octave = window['getNoteOctave'](freq);
-
-        return {frequency: freq, offset: offset, note: note, noteNum: noteNum, octave: octave};
+        return window['getAudioFrequencyInfo'](this.buffer, this.context.sampleRate);
     }
 
 
