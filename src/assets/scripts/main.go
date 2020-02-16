@@ -29,7 +29,9 @@ func getAudioFrequencyInfo(this js.Value, args []js.Value) interface{} {
 
 	sampleRate := args[1].Float()
 
-	freqInfo := gotar.GetFrequencyInfo(dst, sampleRate)
+	calculator := gotar.ZeroCrossingFrequencyCalculator{0.25}
+	frequency := calculator.GetFrequency(dst, sampleRate)
+	freqInfo := gotar.CreateFrequencyInfo(frequency)
 
 	obj := make(map[string]interface{})
 	obj["frequency"] = freqInfo.Frequency
